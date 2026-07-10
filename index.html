@@ -427,42 +427,13 @@
         }
         generateCalendar();
 
-       // --- LIVE WEATHER DATA FUNCTIONALITY ---
-async function loadLiveWeather() {
-    // 1. paste your secret API key from OpenWeatherMap between the quotes below:
-    const apiKey = " 8eb4698c105433cab215dd63794788b5"; 
-    const city = "Santa Clarita";
-    
-    // The web address to fetch data from OpenWeatherMap
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${apiKey}`;
-
-    try {
-        // Fetch the data over the internet
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("Weather data fetch failed");
-        
-        const data = await response.json();
-
-        // 2. Update your website elements with real data
-        document.getElementById('current-city').textContent = data.name;
-        document.getElementById('current-temp').textContent = `${Math.round(data.main.temp)}°F`;
-        
-        // Capitalize the first letter of the weather description
-        const weatherDesc = data.weather[0].description;
-        document.getElementById('current-desc').textContent = weatherDesc.charAt(0).toUpperCase() + weatherDesc.slice(1);
-
-    } catch (error) {
-        console.error("Error fetching live weather:", error);
-        // Fallback text if the internet or API fails
-        document.getElementById('current-desc').textContent = "Weather Unavailable";
-    }
-}
-
-// Run the live weather function immediately when page loads
-loadLiveWeather();
-
-// Automatically refresh the weather data every 15 minutes to keep it fresh
-setInterval(loadLiveWeather, 900000);
+        // --- TELEMETRY ENVIRONMENTAL DATA ---
+        function loadMockWeather() {
+            document.getElementById('current-city').textContent = "Santa Clarita";
+            document.getElementById('current-temp').textContent = "74°F";
+            document.getElementById('current-desc').textContent = "Clear Sky";
+        }
+        loadMockWeather();
     </script>
 </body>
 </html>
