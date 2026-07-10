@@ -3,16 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Professional Dashboard</title>
+    <title>Dashboard</title>
     <style>
         :root {
             --bg: #030303;
             --panel: #0a0a0a;
             --border: rgba(255, 255, 255, 0.08);
-            --accent: #00e5ff;
             --text-primary: #ffffff;
-            --text-secondary: #666666;
-            --spacing: 24px;
+            --text-accent: #00e5ff;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif; }
@@ -20,94 +18,70 @@
         body {
             background-color: var(--bg);
             height: 100vh;
-            display: grid;
-            grid-template-columns: 380px 1fr;
-            gap: var(--spacing);
-            padding: var(--spacing);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
             overflow: hidden;
+            padding: 20px;
         }
 
-        .panel {
+        .box {
             background: var(--panel);
             border: 1px solid var(--border);
             border-radius: 24px;
-            padding: var(--spacing);
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
         }
 
-        .sidebar { display: grid; grid-template-rows: auto 1fr; gap: var(--spacing); }
-        .module-label { color: var(--text-secondary); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 8px; }
-        
-        /* Updated Date Section */
-        .data-primary { color: var(--text-primary); font-size: 2rem; font-weight: 500; font-variant-numeric: tabular-nums; }
-        .day-name-label { color: var(--accent); font-size: 1.2rem; font-weight: 600; margin-top: 4px; }
+        /* Larger Date Box */
+        .date-box {
+            padding: 32px 24px;
+            font-size: 1.6rem; /* Increased size for prominence */
+            font-weight: 700;
+            color: var(--text-accent);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
 
-        /* Calendar Styling */
-        .month-header { font-size: 1.5rem; font-weight: 600; color: var(--text-primary); margin-bottom: 20px; letter-spacing: -0.02em; }
-        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 16px; column-gap: 4px; justify-items: center; }
-        .day-header { font-size: 0.75rem; color: #444; font-weight: 700; padding-bottom: 8px; }
-        .day { font-size: 1.1rem; color: var(--text-secondary); width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
-        .day.active { background: var(--accent); color: var(--bg); font-weight: 800; }
+        .time-box {
+            padding: 48px 24px;
+            color: var(--text-primary);
+        }
 
-        .main-display { justify-content: center; align-items: center; }
-        .time { font-size: clamp(8rem, 15vw, 18rem); font-weight: 900; letter-spacing: -0.05em; color: var(--text-primary); line-height: 1; }
-        .ampm { font-size: 3rem; color: var(--accent); margin-left: 16px; font-weight: 300; }
+        .time { font-size: clamp(5rem, 10vw, 8rem); font-weight: 900; letter-spacing: -0.05em; line-height: 1; }
+        .ampm { font-size: 2rem; color: var(--text-accent); font-weight: 300; margin-left: 12px; }
     </style>
 </head>
 <body>
 
-    <aside class="sidebar">
-        <div class="panel">
-            <div class="module-label">Date</div>
-            <div class="data-primary" id="date-numeric">00/00/0000</div>
-            <div class="day-name-label" id="day-name">---</div>
-        </div>
-        <div class="panel" style="justify-content: center;">
-            <div class="month-header" id="month-display">---</div>
-            <div class="cal-grid" id="cal"></div>
-        </div>
-    </aside>
-
-    <main class="panel main-display">
-        <div style="display: flex; align-items: baseline;">
-            <div class="time" id="time-display">0:00</div>
-            <div class="ampm" id="ampm-display">PM</div>
-        </div>
-    </main>
+    <div class="box date-box" id="date-full">---</div>
+    
+    <div class="box time-box">
+        <div class="time" id="time-display">0:00</div>
+        <div class="ampm" id="ampm-display">PM</div>
+    </div>
 
     <script>
-        function refresh() {
+        function update() {
             const now = new Date();
-            // Numerical Date
-            document.getElementById('date-numeric').textContent = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
-            // Day of Week
-            document.getElementById('day-name').textContent = now.toLocaleDateString('en-US', { weekday: 'long' });
+            const dateStr = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+            const dayStr = now.toLocaleDateString('en-US', { weekday: 'long' });
+            document.getElementById('date-full').textContent = `${dateStr} • ${dayStr}`;
             
-            // Time
             let h = now.getHours();
             const am = h >= 12 ? 'PM' : 'AM';
             h = h % 12 || 12;
             document.getElementById('time-display').textContent = `${h}:${now.getMinutes().toString().padStart(2, '0')}`;
             document.getElementById('ampm-display').textContent = am;
         }
-
-        const now = new Date();
-        document.getElementById('month-display').textContent = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
         
-        const cal = document.getElementById('cal');
-        ['S','M','T','W','T','F','S'].forEach(d => cal.innerHTML += `<div class="day-header">${d}</div>`);
-        
-        const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).getDay();
-        for(let i=0; i<firstDay; i++) cal.innerHTML += `<div></div>`;
-        
-        const days = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-        for(let i=1; i<=days; i++) {
-            cal.innerHTML += `<div class="day ${i===now.getDate()?'active':''}">${i}</div>`;
-        }
-        
-        setInterval(refresh, 1000);
-        refresh();
+        setInterval(update, 1000);
+        update();
     </script>
 </body>
 </html>
