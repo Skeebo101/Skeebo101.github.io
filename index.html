@@ -11,6 +11,7 @@
             --border: rgba(255, 255, 255, 0.08);
             --text-primary: #ffffff;
             --text-accent: #00e5ff;
+            --text-muted: #666666;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif; }
@@ -20,50 +21,74 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            gap: 24px;
+            gap: 20px;
+            padding-top: 40px;
             overflow: hidden;
-            padding: 20px;
         }
 
         .box {
             background: var(--panel);
             border: 1px solid var(--border);
             border-radius: 24px;
+            width: 90%;
+            max-width: 500px; /* Kept concise to fit "in the box" */
+            padding: 24px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
-            align-items: center;
-            width: 100%;
-            max-width: 600px;
         }
 
-        /* Larger Date Box */
-        .date-box {
-            padding: 32px 24px;
-            font-size: 1.6rem; /* Increased size for prominence */
-            font-weight: 700;
-            color: var(--text-accent);
-            letter-spacing: 0.1em;
+        .label {
+            color: var(--text-muted);
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.25em;
             text-transform: uppercase;
+            margin-bottom: 6px;
         }
 
-        .time-box {
-            padding: 48px 24px;
+        .value {
+            color: var(--text-accent);
+            font-size: 1.5rem;
+            font-weight: 700;
+            white-space: nowrap; /* Forces content to stay in one line */
+        }
+
+        .time-group {
+            display: flex;
+            align-items: baseline;
             color: var(--text-primary);
         }
 
-        .time { font-size: clamp(5rem, 10vw, 8rem); font-weight: 900; letter-spacing: -0.05em; line-height: 1; }
-        .ampm { font-size: 2rem; color: var(--text-accent); font-weight: 300; margin-left: 12px; }
+        .time { 
+            font-size: clamp(4rem, 15vw, 6rem); 
+            font-weight: 900; 
+            letter-spacing: -0.02em; 
+            line-height: 1; 
+        }
+
+        .ampm { 
+            font-size: 1.8rem; 
+            color: var(--text-accent); 
+            font-weight: 400; 
+            margin-left: 12px; 
+        }
     </style>
 </head>
 <body>
 
-    <div class="box date-box" id="date-full">---</div>
+    <div class="box">
+        <div class="label">DATE</div>
+        <div class="value" id="date-full">---</div>
+    </div>
     
-    <div class="box time-box">
-        <div class="time" id="time-display">0:00</div>
-        <div class="ampm" id="ampm-display">PM</div>
+    <div class="box">
+        <div class="label">TIME</div>
+        <div class="time-group">
+            <div class="time" id="time-display">0:00</div>
+            <div class="ampm" id="ampm-display">PM</div>
+        </div>
     </div>
 
     <script>
@@ -71,7 +96,8 @@
             const now = new Date();
             const dateStr = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
             const dayStr = now.toLocaleDateString('en-US', { weekday: 'long' });
-            document.getElementById('date-full').textContent = `${dateStr} • ${dayStr}`;
+            // Combined with a separator for optimal fit
+            document.getElementById('date-full').textContent = `${dateStr} · ${dayStr}`;
             
             let h = now.getHours();
             const am = h >= 12 ? 'PM' : 'AM';
