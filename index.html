@@ -3,110 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Live Executive Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Professional Dashboard</title>
     <style>
         :root {
-            --bg: #030406;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.06);
-            --accent: #00f2fe;
-            --text-main: #f8fafc;
-            --text-dim: #64748b;
+            --bg: #030303;
+            --panel: #0a0a0a;
+            --border: rgba(255, 255, 255, 0.08);
+            --accent: #00e5ff;
+            --text-primary: #ffffff;
+            --text-secondary: #666666;
+            --spacing: 24px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif; }
 
         body {
             background-color: var(--bg);
-            color: var(--text-main);
-            height: 100dvh;
+            height: 100vh;
             display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 24px;
-            padding: 24px;
+            grid-template-columns: 380px 1fr;
+            gap: var(--spacing);
+            padding: var(--spacing);
+            overflow: hidden;
         }
 
-        .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
+        .panel {
+            background: var(--panel);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 24px;
+            border-radius: 24px;
+            padding: var(--spacing);
             display: flex;
             flex-direction: column;
         }
 
-        .sidebar { display: flex; flex-direction: column; gap: 24px; }
-        .label { color: var(--text-dim); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px; }
-        .value { font-size: 1.5rem; font-weight: 600; }
-        .weather-value { color: var(--accent); font-size: 2rem; font-weight: 700; }
-
-        .main-column { display: flex; flex-direction: column; gap: 24px; }
-        .welcome-card { height: 120px; justify-content: center; }
-        .clock-card { flex-grow: 1; justify-content: center; align-items: center; }
-
-        .clock-time { font-size: clamp(6rem, 18vw, 16rem); font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.05em; line-height: 1; }
-        .clock-ampm { font-size: 3rem; font-weight: 300; font-style: italic; color: var(--accent); margin-left: 12px; }
+        .sidebar { display: grid; grid-template-rows: auto 1fr; gap: var(--spacing); }
+        .module-label { color: var(--text-secondary); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 8px; }
         
-        /* Updated Calendar Styles */
-        #month-display { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 20px; text-align: center; color: var(--accent); }
-        #cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 15px; text-align: center; font-size: 1.1rem; }
-        .day-head { color: var(--text-dim); font-weight: 400; font-size: 0.9rem; padding-bottom: 10px; }
-        .today { color: var(--accent); font-weight: 700; transform: scale(1.1); }
+        /* Updated Date Section */
+        .data-primary { color: var(--text-primary); font-size: 2rem; font-weight: 500; font-variant-numeric: tabular-nums; }
+        .day-name-label { color: var(--accent); font-size: 1.2rem; font-weight: 600; margin-top: 4px; }
+
+        /* Calendar Styling */
+        .month-header { font-size: 1.5rem; font-weight: 600; color: var(--text-primary); margin-bottom: 20px; letter-spacing: -0.02em; }
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 16px; column-gap: 4px; justify-items: center; }
+        .day-header { font-size: 0.75rem; color: #444; font-weight: 700; padding-bottom: 8px; }
+        .day { font-size: 1.1rem; color: var(--text-secondary); width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+        .day.active { background: var(--accent); color: var(--bg); font-weight: 800; }
+
+        .main-display { justify-content: center; align-items: center; }
+        .time { font-size: clamp(8rem, 15vw, 18rem); font-weight: 900; letter-spacing: -0.05em; color: var(--text-primary); line-height: 1; }
+        .ampm { font-size: 3rem; color: var(--accent); margin-left: 16px; font-weight: 300; }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <div class="card">
-            <div class="label">Date</div>
-            <div class="value" id="date-display">...</div>
+    <aside class="sidebar">
+        <div class="panel">
+            <div class="module-label">Date</div>
+            <div class="data-primary" id="date-numeric">00/00/0000</div>
+            <div class="day-name-label" id="day-name">---</div>
         </div>
-        <div class="card">
-            <div class="label">Santa Clarita</div>
-            <div class="weather-value">74°F</div>
-            <div style="color: var(--text-dim);">Clear Sky</div>
+        <div class="panel" style="justify-content: center;">
+            <div class="month-header" id="month-display">---</div>
+            <div class="cal-grid" id="cal"></div>
         </div>
-        <div class="card" style="flex-grow:1;">
-            <div id="month-display">...</div>
-            <div id="cal"></div>
-        </div>
-    </div>
+    </aside>
 
-    <div class="main-column">
-        <div class="card welcome-card">
-            <div style="font-size: 2rem; font-weight: 400; color: var(--text-dim);">Welcome</div>
+    <main class="panel main-display">
+        <div style="display: flex; align-items: baseline;">
+            <div class="time" id="time-display">0:00</div>
+            <div class="ampm" id="ampm-display">PM</div>
         </div>
-        <div class="card clock-card">
-            <div style="display: flex; align-items: baseline;">
-                <div class="clock-time" id="time-display">0:00</div>
-                <div class="clock-ampm" id="ampm-display">AM</div>
-            </div>
-        </div>
-    </div>
+    </main>
 
     <script>
-        function updateDashboard() {
+        function refresh() {
             const now = new Date();
-            document.getElementById('date-display').textContent = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-            let hours = now.getHours();
-            const ampm = hours >= 12 ? 'PM' : 'AM';
-            hours = hours % 12 || 12;
-            document.getElementById('time-display').textContent = `${hours}:${now.getMinutes().toString().padStart(2, '0')}`;
-            document.getElementById('ampm-display').textContent = ampm;
+            // Numerical Date
+            document.getElementById('date-numeric').textContent = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+            // Day of Week
+            document.getElementById('day-name').textContent = now.toLocaleDateString('en-US', { weekday: 'long' });
+            
+            // Time
+            let h = now.getHours();
+            const am = h >= 12 ? 'PM' : 'AM';
+            h = h % 12 || 12;
+            document.getElementById('time-display').textContent = `${h}:${now.getMinutes().toString().padStart(2, '0')}`;
+            document.getElementById('ampm-display').textContent = am;
         }
 
         const now = new Date();
         document.getElementById('month-display').textContent = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        
         const cal = document.getElementById('cal');
-        ['S','M','T','W','T','F','S'].forEach(d => cal.innerHTML += `<div class="day-head">${d}</div>`);
-        const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-        for(let i=1; i<=daysInMonth; i++) {
-            cal.innerHTML += `<div class="${i===now.getDate()?'today':''}">${i}</div>`;
+        ['S','M','T','W','T','F','S'].forEach(d => cal.innerHTML += `<div class="day-header">${d}</div>`);
+        
+        const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).getDay();
+        for(let i=0; i<firstDay; i++) cal.innerHTML += `<div></div>`;
+        
+        const days = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+        for(let i=1; i<=days; i++) {
+            cal.innerHTML += `<div class="day ${i===now.getDate()?'active':''}">${i}</div>`;
         }
-        setInterval(updateDashboard, 1000);
-        updateDashboard();
+        
+        setInterval(refresh, 1000);
+        refresh();
     </script>
 </body>
 </html>
