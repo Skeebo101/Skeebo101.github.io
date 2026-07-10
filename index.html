@@ -2,438 +2,111 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Premium Executive Dashboard</title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Live Executive Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* --- CORE CONFIGURATION & THEMING --- */
         :root {
-            --neon-cyan: #00f2fe;
-            --neon-blue: #0052d4;
-            --glass-bg: rgba(10, 15, 30, 0.55);
-            --glass-border: rgba(255, 255, 255, 0.06);
-            --text-gradient: linear-gradient(180deg, #ffffff 20%, #cbd5e1 70%, #94a3b8 100%);
+            --bg: #030406;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.06);
+            --accent: #00f2fe;
+            --text-main: #f8fafc;
+            --text-dim: #64748b;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
 
-        html, body {
-            width: 100%;
-            height: 100vh;
-            min-height: -webkit-fill-available; /* Smooth scaling engine for mobile browser address bars */
-            background: radial-gradient(circle at 90% 10%, #16223f 0%, #090d1a 45%, #03050a 100%);
-            color: #ffffff;
-            overflow: hidden;
-        }
-
-        /* Responsive Global Layout Grid Matrix */
         body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            height: 100dvh;
             display: grid;
-            grid-template-columns: minmax(300px, 350px) 1fr; 
-            padding: calc(15px + 1.2vw);
-            gap: calc(15px + 1.2vw);
-            align-items: stretch; 
+            grid-template-columns: 320px 1fr;
+            gap: 24px;
+            padding: 24px;
         }
 
-        /* --- HARMONIZED CONTAINER ARCHITECTURE --- */
         .card {
-            position: relative;
-            background: var(--glass-bg);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--glass-border);
-            border-top: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 24px;
-            padding: calc(16px + 1vw);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), 
-                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            width: 100%;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(0, 242, 254, 0.04) 0%, transparent 60%);
-            pointer-events: none;
-            transition: opacity 0.5s ease;
-            opacity: 0.5;
-        }
-
-        .card:hover {
-            transform: translateY(-4px) scale(1.005);
-            border-color: rgba(0, 242, 254, 0.25);
-            border-top-color: rgba(0, 242, 254, 0.4);
-            box-shadow: 0 40px 70px rgba(0, 0, 0, 0.5), 
-                        0 0 30px rgba(0, 242, 254, 0.06);
-        }
-
-        .card:hover::before { opacity: 1; }
-
-        /* --- ORGANIZED LEFT COLUMN (SIDEBAR) --- */
-        .left-sidebar {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
             display: flex;
             flex-direction: column;
-            gap: calc(15px + 1.2vw);
-            width: 100%;
         }
 
-        .date-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            height: 120px;
-            background: rgba(12, 20, 38, 0.6);
-            flex-shrink: 0;
-        }
+        .sidebar { display: flex; flex-direction: column; gap: 24px; }
+        .label { color: var(--text-dim); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px; }
+        .value { font-size: 1.5rem; font-weight: 600; }
+        .weather-value { color: var(--accent); font-size: 2rem; font-weight: 700; }
 
-        .current-date {
-            font-size: calc(2.2rem + 0.3vw);
-            font-weight: 800;
-            letter-spacing: 1px;
-            line-height: 1;
-            background: var(--text-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        .main-column { display: flex; flex-direction: column; gap: 24px; }
+        .welcome-card { height: 120px; justify-content: center; }
+        .clock-card { flex-grow: 1; justify-content: center; align-items: center; }
 
-        .current-day-name-label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            color: var(--neon-cyan);
-            letter-spacing: 3px;
-            text-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
-            margin-top: 10px;
-        }
-
-        .current-weather { 
-            text-align: center; 
-            flex-shrink: 0;
-        }
-        .current-weather .city {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--neon-cyan);
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-bottom: 10px;
-            opacity: 0.8;
-        }
-        .current-weather .temp {
-            font-size: calc(2.4rem + 0.5vw);
-            font-weight: 800;
-            line-height: 1;
-            background: var(--text-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .current-weather .desc {
-            color: #94a3b8;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-top: 8px;
-            letter-spacing: 0.5px;
-        }
-
-        .calendar {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 0; /* Safeguards calendar frame geometry inside flex containers */
-        }
-        .calendar-header {
-            text-align: center;
-            font-weight: 700;
-            margin-bottom: 16px;
-            color: var(--neon-cyan);
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            text-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
-        }
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 6px;
-            text-align: center;
-            font-size: 0.8rem;
-            flex-grow: 1;
-        }
-        .calendar-day-name {
-            font-weight: 700;
-            color: #475569;
-            font-size: 0.7rem;
-            letter-spacing: 1px;
-        }
-        .calendar-day {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            color: #94a3b8;
-            font-weight: 600;
-            aspect-ratio: 1;
-            transition: all 0.2s ease;
-        }
-        .calendar-day:hover:not(.today) {
-            background: rgba(255, 255, 255, 0.05);
-            color: #ffffff;
-        }
-        .calendar-day.today {
-            background: linear-gradient(135deg, var(--neon-blue), var(--neon-cyan));
-            color: #ffffff;
-            font-weight: 700;
-            box-shadow: 0 0 20px rgba(0, 242, 254, 0.45);
-        }
-
-        /* --- ORGANIZED RIGHT COLUMN (MAIN CONTENT) --- */
-        .right-content {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            gap: calc(15px + 1.2vw);
-        }
-
-        .welcome-box {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            height: 120px;
-            background: rgba(8, 12, 24, 0.4);
-            padding-left: calc(15px + 1.5vw);
-            flex-shrink: 0;
-        }
-
-        .welcome-header {
-            font-size: calc(2rem + 1vw); 
-            font-weight: 800;
-            letter-spacing: -1.5px;
-            line-height: 1;
-            background: var(--text-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .clock-card {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-grow: 1; 
-            width: 100%;
-            background: rgba(8, 12, 24, 0.4);
-            padding: 20px;
-        }
-
-        .big-time {
-            display: flex;
-            align-items: baseline;
-            justify-content: center;
-            font-size: min(10.5vw, 24vh, 185px); 
-            font-weight: 800;
-            letter-spacing: -0.04em;
-            line-height: 0.9;
-            white-space: nowrap;
-        }
-
-        #hours-mins {
-            background: linear-gradient(180deg, #ffffff 40%, #cbd5e1 75%, #64748b 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 8px 24px rgba(0,0,0,0.6));
-        }
-
-        .big-time .ampm {
-            font-family: 'Playfair Display', serif;
-            font-size: 0.22em; 
-            font-style: italic;
-            font-weight: 400;
-            margin-left: 0.15em; 
-            letter-spacing: 2px;
-            background: linear-gradient(135deg, var(--neon-cyan) 0%, #4f46e5 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 40px rgba(0, 242, 254, 0.25);
-        }
-
-        /* --- CROSS-DEVICE STYLING ENGINE (Tablets, iPhones & Mobile viewports) --- */
-        @media (max-width: 950px) {
-            html, body { 
-                overflow-y: auto; 
-                height: auto; 
-            }
-            body {
-                grid-template-columns: 1fr; 
-                padding: calc(12px + 1vw);
-                gap: 16px;
-            }
-
-            /* Switches focus to welcoming the mobile user first */
-            .left-sidebar { order: 2; }
-            .right-content { order: 1; }
-
-            .welcome-box {
-                height: auto;
-                justify-content: center;
-                padding: 24px;
-                text-align: center;
-            }
-
-            .welcome-header { font-size: 2.4rem; }
-
-            .clock-card {
-                padding: 45px 16px;
-                flex-grow: 0; 
-                min-height: auto;
-            }
-
-            .big-time { font-size: 15vw; }
-            .date-card { height: auto; padding: 20px; }
-            .calendar-grid { gap: 4px; }
-        }
-
-        /* Dynamic Notch & Safe-Area Adjustments for Premium Bezel-less Devices */
-        @supports (padding: env(safe-area-inset-top)) {
-            body {
-                padding-top: max(calc(15px + 1.2vw), env(safe-area-inset-top));
-                padding-bottom: max(calc(15px + 1.2vw), env(safe-area-inset-bottom));
-                padding-left: max(calc(15px + 1.2vw), env(safe-area-inset-left));
-                padding-right: max(calc(15px + 1.2vw), env(safe-area-inset-right));
-            }
-        }
+        .clock-time { font-size: clamp(6rem, 18vw, 16rem); font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.05em; line-height: 1; }
+        .clock-ampm { font-size: 3rem; font-weight: 300; font-style: italic; color: var(--accent); margin-left: 12px; }
+        
+        /* Updated Calendar Styles */
+        #month-display { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 20px; text-align: center; color: var(--accent); }
+        #cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 15px; text-align: center; font-size: 1.1rem; }
+        .day-head { color: var(--text-dim); font-weight: 400; font-size: 0.9rem; padding-bottom: 10px; }
+        .today { color: var(--accent); font-weight: 700; transform: scale(1.1); }
     </style>
 </head>
 <body>
 
-    <!-- SIDEBAR WRAPPER -->
-    <div class="left-sidebar">
-        <!-- Organized Date Display Card -->
-        <div class="card date-card">
-            <div class="current-date" id="date-display">00/00/00</div>
-            <div class="current-day-name-label" id="day-name-display">Weekday</div>
+    <div class="sidebar">
+        <div class="card">
+            <div class="label">Date</div>
+            <div class="value" id="date-display">...</div>
         </div>
-        
-        <!-- Organized Weather Conditions Card -->
-        <div class="card current-weather">
-            <div class="city" id="current-city">Santa Clarita</div>
-            <div class="temp" id="current-temp">74°F</div>
-            <div class="desc" id="current-desc">Clear Sky</div>
+        <div class="card">
+            <div class="label">Santa Clarita</div>
+            <div class="weather-value">74°F</div>
+            <div style="color: var(--text-dim);">Clear Sky</div>
         </div>
-
-        <!-- Organized System Calendar Card -->
-        <div class="card calendar">
-            <div class="calendar-header" id="calendar-month-year">Month Year</div>
-            <div class="calendar-grid" id="calendar-grid">
-                <!-- Days rendered via JavaScript logic -->
-            </div>
+        <div class="card" style="flex-grow:1;">
+            <div id="month-display">...</div>
+            <div id="cal"></div>
         </div>
     </div>
 
-    <!-- MAIN PANEL WRAPPER -->
-    <div class="right-content">
-        <!-- Optimized Welcome Layout Card Box -->
-        <div class="card welcome-box">
-            <div class="welcome-header">Welcome</div>
+    <div class="main-column">
+        <div class="card welcome-card">
+            <div style="font-size: 2rem; font-weight: 400; color: var(--text-dim);">Welcome</div>
         </div>
-
-        <!-- Dynamic Responsive Scale Center Clock Card -->
         <div class="card clock-card">
-            <div class="big-time" id="time-display">
-                <span id="hours-mins">00:00</span><span class="ampm" id="ampm-val">AM</span>
+            <div style="display: flex; align-items: baseline;">
+                <div class="clock-time" id="time-display">0:00</div>
+                <div class="clock-ampm" id="ampm-display">AM</div>
             </div>
         </div>
     </div>
 
     <script>
-        // --- CHRONOS TIME ENGINE ---
-        function updateTimeAndDate() {
+        function updateDashboard() {
             const now = new Date();
-            
+            document.getElementById('date-display').textContent = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
             let hours = now.getHours();
-            const minutes = String(now.getMinutes()).padStart(2, '0');
             const ampm = hours >= 12 ? 'PM' : 'AM';
-            hours = hours % 12;
-            hours = hours ? hours : 12; 
-            
-            document.getElementById('hours-mins').textContent = `${hours}:${minutes}`;
-            document.getElementById('ampm-val').textContent = ampm;
-
-            const mm = String(now.getMonth() + 1).padStart(2, '0');
-            const dd = String(now.getDate()).padStart(2, '0');
-            const yy = String(now.getFullYear()).slice(-2);
-            document.getElementById('date-display').textContent = `${mm}/${dd}/${yy}`;
-
-            const dayNamesLong = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-            document.getElementById('day-name-display').textContent = dayNamesLong[now.getDay()];
+            hours = hours % 12 || 12;
+            document.getElementById('time-display').textContent = `${hours}:${now.getMinutes().toString().padStart(2, '0')}`;
+            document.getElementById('ampm-display').textContent = ampm;
         }
-        setInterval(updateTimeAndDate, 1000);
-        updateTimeAndDate();
 
-        // --- INTERNAL CALENDAR COMPILER ---
-        function generateCalendar() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = now.getMonth();
-            
-            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            document.getElementById('calendar-month-year').textContent = `${monthNames[month]} ${year}`;
-
-            const grid = document.getElementById('calendar-grid');
-            grid.innerHTML = ''; 
-
-            const dayNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-            dayNames.forEach(name => {
-                const dayNameEl = document.createElement('div');
-                dayNameEl.classList.add('calendar-day-name');
-                dayNameEl.textContent = name;
-                grid.appendChild(dayNameEl);
-            });
-
-            const firstDay = new Date(year, month, 1).getDay();
-            const totalDays = new Date(year, month + 1, 0).getDate();
-
-            for (let i = 0; i < firstDay; i++) {
-                const emptyCell = document.createElement('div');
-                grid.appendChild(emptyCell);
-            }
-
-            for (let day = 1; day <= totalDays; day++) {
-                const dayCell = document.createElement('div');
-                dayCell.classList.add('calendar-day');
-                dayCell.textContent = day;
-                
-                if (day === now.getDate()) {
-                    dayCell.classList.add('today');
-                }
-                grid.appendChild(dayCell);
-            }
+        const now = new Date();
+        document.getElementById('month-display').textContent = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        const cal = document.getElementById('cal');
+        ['S','M','T','W','T','F','S'].forEach(d => cal.innerHTML += `<div class="day-head">${d}</div>`);
+        const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+        for(let i=1; i<=daysInMonth; i++) {
+            cal.innerHTML += `<div class="${i===now.getDate()?'today':''}">${i}</div>`;
         }
-        generateCalendar();
-
-        // --- TELEMETRY ENVIRONMENTAL DATA ---
-        function loadMockWeather() {
-            document.getElementById('current-city').textContent = "Santa Clarita";
-            document.getElementById('current-temp').textContent = "74°F";
-            document.getElementById('current-desc').textContent = "Clear Sky";
-        }
-        loadMockWeather();
+        setInterval(updateDashboard, 1000);
+        updateDashboard();
     </script>
 </body>
 </html>
